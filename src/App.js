@@ -1,23 +1,53 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './App.css';
 
 function App() {
+  const [tasks, setTasks] = useState([]);
+  const [newTask, setNewTask] = useState('');
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/tasks');
+      setTasks(response.data);
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  };
+
+  const addTask = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/tasks', { text: newTask, completed: false });
+      setTasks([...tasks, response.data]);
+      setNewTask('');
+    } catch (error) {
+      console.error('Error adding task:', error);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setNewTask(e.target.value);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Todo List</h1>
+      <input
+        type="text"
+        value={newTask}
+        onChange={handleInputChange}
+        placeholder="Add a new task"
+      />
+      <button onClick={addTask}>Add Task</button>
+      <ul>
+        {tasks.map((task) => (
+          <li key={task._id}>{task.text}</li>
+        ))}
+      </ul>
     </div>
   );
 }
