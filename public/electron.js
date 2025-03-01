@@ -1,6 +1,7 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
-const isDev = require('electron-is-dev');
+// Replace electron-is-dev with this
+const isDev = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 const { spawn } = require('child_process');
 
 let mainWindow;
@@ -30,11 +31,11 @@ function createWindow() {
   });
 
   // Load the app
-  mainWindow.loadURL(
-    isDev
-      ? 'http://localhost:3000'
-      : `file://${path.join(__dirname, '../build/index.html')}`
-  );
+  const startUrl = isDev
+    ? 'http://localhost:3000'
+    : `file://${path.join(__dirname, '../build/index.html')}`;
+  
+  mainWindow.loadURL(startUrl);
 
   // Open DevTools in development mode
   if (isDev) {

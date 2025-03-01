@@ -13,6 +13,9 @@ server/node_modules
 /build
 /client/build
 
+# Build output
+dist/
+
 # environment variables
 .env
 .env.local
