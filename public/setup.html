@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Todo List App Setup</title>
+  <style>
+    body {
+      font-family: monospace;
+      background-color: #121212;
+      color: white;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container {
+      background-color: #0a3416;
+      border: 3px solid #11e242;
+      border-radius: 8px;
+      width: 80%;
+      max-width: 500px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(17, 226, 66, 0.3);
+    }
+    h1 {
+      color: #11e242;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      background-color: #121212;
+      border: 2px solid #11e242;
+      border-radius: 4px;
+      color: white;
+      font-family: monospace;
+    }
+    button {
+      background-color: #11e242;
+      color: black;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      display: block;
+      margin: 0 auto;
+      font-family: monospace;
+    }
+    button:hover {
+      background-color: #00b323;
+    }
+    .info {
+      margin-top: 15px;
+      font-size: 0.9em;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Todo List App Setup</h1>
+    <p>To connect your Todo List app to MongoDB, please enter your MongoDB connection URI below.</p>
+    <p>If you don't have a database, you can create one on MongoDB and retrieve a URI.</p>
+    
+    <form id="setup-form">
+      <label for="mongo-uri">MongoDB Connection URI:</label>
+      <input 
+        type="text" 
+        id="mongo-uri" 
+        name="mongo-uri" 
+        placeholder="mongodb+srv://username:password@cluster.mongodb.net/dbname"
+        required
+      >
+      
+      <button type="submit">Save Configuration</button>
+    </form>
+    
+    <p class="info">This configuration will be stored locally on this device. You'll need to enter the same URI on all devices you want to sync with this database.</p>
+  </div>
+
+  <script>
+    const { ipcRenderer } = require('electron');
+    
+    document.getElementById('setup-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const mongoUri = document.getElementById('mongo-uri').value.trim();
+      
+      if (mongoUri) {
+        ipcRenderer.send('save-config', { mongoUri });
+      }
+    });
+  </script>
+</body>
+</html>

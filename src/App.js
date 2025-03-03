@@ -23,7 +23,6 @@ function App() {
         console.error("Error checking connection status:", error);
       }
     };
-
     // Initial check
     checkConnectionStatus();
     
