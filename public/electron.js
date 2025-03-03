@@ -4,6 +4,11 @@ const isDev = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD =
 const { spawn } = require('child_process');
 const ConfigManager = require(path.join(__dirname, '../server/configManager'));
 
+// Define the server path
+const serverPath = isDev 
+  ? path.join(__dirname, '../server/server.js')
+  : path.join(process.resourcesPath, 'server/server.js');
+
 let mainWindow;
 let serverProcess;
 const configManager = new ConfigManager();
@@ -42,35 +47,31 @@ async function showSetupDialog() {
 }
 
 function startServer() {
+  const mongoUri = configManager.getMongoUri();
+  console.log('Starting server with MongoDB URI:', mongoUri);
+  
   const env = Object.assign({}, process.env, {
-    MONGODB_URI: configManager.getMongoUri()
+    MONGODB_URI: mongoUri
   });
   
   try {
+    console.log('Using server path:', serverPath);
     serverProcess = spawn('node', [serverPath], { env });
     
-    serverProcess.stdout.on('data', (data) => {
-      console.log(`Server: ${data.toString()}`);
-    });
-    
-    serverProcess.stderr.on('data', (data) => {
-      console.error(`Server Error: ${data.toString()}`);
-    });
-    
+    // Add better error handling
     serverProcess.on('error', (error) => {
       console.error('Failed to start server:', error);
+      dialog.showErrorBox('Server Error', `Failed to start the server: ${error.message}`);
     });
     
-    serverProcess.on('close', (code) => {
-      console.log(`Server process exited with code ${code}`);
-    });
+    // Rest of your existing code
   } catch (error) {
     console.error('Error spawning server process:', error);
+    dialog.showErrorBox('Server Error', `Could not spawn server process: ${error.message}`);
   }
 }
 
 async function createWindow() {
-  // Create the main window first, make it occupy 80% width, 60% height
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 900,
