@@ -7,10 +7,12 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
   const [newDescription, setNewDescription] = useState('');
+  const [newTaskType, setNewTaskType] = useState('Other');
   const [dbStatus, setDbStatus] = useState({ connected: false, checking: true });
   const [editingTask, setEditingTask] = useState(null);
   const [editText, setEditText] = useState('');
   const [editDescription, setEditDescription] = useState('');
+  const [editTaskType, setEditTaskType] = useState('Other');
 
   useEffect(() => {
     // Check MongoDB connection status
@@ -53,10 +55,12 @@ function App() {
     }
   
     try {
-      const response = await axios.post(`${apiBaseUrl}/tasks`, { text: newTask, description: newDescription, completed: false });
+      const response = await axios.post(`${apiBaseUrl}/tasks`, { text: newTask, description: newDescription, completed: false, type: newTaskType });
       setTasks([...tasks, response.data]);
+      // Reset to default
       setNewTask('');
       setNewDescription('');
+      setNewTaskType('Other'); 
     } catch (error) {
       console.error('Error adding task:', error);
     }
@@ -93,6 +97,7 @@ function App() {
     setEditingTask(task._id);
     setEditText(task.text);
     setEditDescription(task.description);
+    setEditTaskType(task.type || 'Other');
   };
   
   // Cancel editing
@@ -110,11 +115,24 @@ function App() {
     
     await updateTask(id, { 
       text: editText, 
-      description: editDescription 
+      description: editDescription,
+      type: editTaskType
     });
     
     setEditingTask(null);
   };
+
+  const groupedTasks = tasks.reduce((groups, task) => {
+    const type = task.type || 'Other';
+    if (!groups[type]) {
+      groups[type] = [];
+    }
+    groups[type].push(task);
+    return groups;
+  }, {});
+
+  // Define the order based on schema
+  const typeOrder = ['Personal', 'Work', 'School', 'Research', 'Health', 'Other'];
   
   return (
     <div className="App">
@@ -140,47 +158,80 @@ function App() {
           onChange={handleDescriptionChange}
           placeholder="Description"
         />
+        <select
+          value={newTaskType}
+          onChange={(e) => setNewTaskType(e.target.value)}
+          className="task-type-select"
+        >
+          <option value="Personal">Personal</option>
+          <option value="Work">Work</option>
+          <option value="School">School</option>
+          <option value="Research">Research</option>
+          <option value="Health">Health</option>
+          <option value="Other">Other</option>
+        </select>
         <button onClick={addTask}>Add Task</button>
       </div>
-      <ul>
-        {tasks.map((task) => (
-          <li key={task._id} className="task-box">
-            {editingTask === task._id ? (
-              // Editing mode
-              <>
-                <input
-                  type="text"
-                  value={editText}
-                  onChange={(e) => setEditText(e.target.value)}
-                  className="edit-input"
-                />
-                <textarea
-                  value={editDescription}
-                  onChange={(e) => setEditDescription(e.target.value)}
-                  className="edit-textarea"
-                />
-                <div className="task-buttons">
-                  <button onClick={() => saveEdit(task._id)}>Save</button>
-                  <button onClick={cancelEditing}>Cancel</button>
-                </div>
-              </>
-            ) : (
-              // View mode
-              <>
-                <h3>{task.text}</h3>
-                <p className="task-description">{task.description}</p>
-                <div className="task-buttons">
-                  <button onClick={() => updateTask(task._id, { ...task, completed: !task.completed })}>
-                    {task.completed ? 'Undo' : 'Complete'}
-                  </button>
-                  <button onClick={() => startEditing(task)}>Edit</button>
-                  <button onClick={() => deleteTask(task._id)}>Delete</button>
-                </div>
-              </>
-            )}
-          </li>
+      <div className="tasks-container">
+      {typeOrder
+        .filter(type => groupedTasks[type] && groupedTasks[type].length > 0)
+        .map((taskType) => (
+          <div key={taskType} className="task-type-section">
+            <h2 className="task-type-heading">{taskType}</h2>
+            <ul>
+              {groupedTasks[taskType].map((task) => (
+                <li key={task._id} className={`task-box task-type-${task.type?.toLowerCase() || 'other'}`}>
+                    {editingTask === task._id ? (
+                // Editing mode
+                    <>
+                      <input
+                        type="text"
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                        className="edit-input"
+                      />
+                      <textarea
+                        value={editDescription}
+                        onChange={(e) => setEditDescription(e.target.value)}
+                        className="edit-textarea"
+                      />
+                      <select
+                        value={editTaskType}
+                        onChange={(e) => setEditTaskType(e.target.value)}
+                        className="edit-task-type-select"
+                      >
+                        <option value="Personal">Personal</option>
+                        <option value="Work">Work</option>
+                        <option value="School">School</option>
+                        <option value="Research">Research</option>
+                        <option value="Health">Health</option>
+                        <option value="Other">Other</option>
+                      </select>
+                      <div className="task-buttons">
+                        <button onClick={() => saveEdit(task._id)}>Save</button>
+                        <button onClick={cancelEditing}>Cancel</button>
+                      </div>
+                    </>
+                  ) : (
+                    // View mode
+                    <>
+                      <h3>{task.text}</h3>
+                      <p className="task-description">{task.description}</p>
+                      <div className="task-buttons">
+                        <button onClick={() => updateTask(task._id, { ...task, completed: !task.completed })}>
+                          {task.completed ? 'Undo' : 'Complete'}
+                        </button>
+                        <button onClick={() => startEditing(task)}>Edit</button>
+                        <button onClick={() => deleteTask(task._id)}>Delete</button>
+                      </div>
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

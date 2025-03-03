@@ -71,8 +71,9 @@ textarea {
 }
 
 .TODOLIST {
+  margin: 10px;
+  padding-bottom: 30px;
   color: #11e242;
-  padding: 0px;
   font-size: 10vh;
   text-shadow: 0 0 10px #11e242;
 }
@@ -103,6 +104,8 @@ ul {
   padding: 0;
   list-style-type: none;
   margin: 30px;
+  padding-left: 50px;
+  padding-right: 50px;
 }
 
 .task-box {
@@ -212,4 +215,47 @@ ul {
   max-width: 500px;
   margin: 0 auto 30px auto;
   box-shadow: 0 0 15px rgba(17, 226, 66, 0.3);
+}
+
+
+.task-type-select, .edit-task-type-select {
+  display: block;
+  margin: 15px auto;
+  padding: 15px;
+  width: 80%;
+  max-width: 500px;
+  border: 2px solid #11e242;
+  border-radius: 8px;
+  background-color: #121212;
+  color: white;
+  font-family: monospace;
+  font-size: 1.2em;
+  transition: all 0.3s ease;
+}
+
+.task-type-section {
+  margin: 30px 0;
+  width: 100%;
+}
+
+.task-type-heading {
+  text-align: left;
+  font-size: 2.5em;
+  margin-left: 30px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #11e242;
+  width: fit-content;
+  text-shadow: 0 0 5px #11e242;
+}
+
+/* Modify the existing ul style to work within task type sections */
+.task-type-section ul {
+  justify-content: flex-start;
+  margin: 20px 0;
+}
+
+
+/* Task box modifications */
+.task-box {
+  position: relative; /* For positioning the badge */
 }

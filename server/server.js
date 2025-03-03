@@ -42,6 +42,11 @@ const TaskSchema = new mongoose.Schema({
   text: String,
   description: String,
   completed: Boolean,
+  type: {
+    type: String,
+    enum: ['Personal', 'Work', 'School', 'Research', 'Health', 'Other'],
+    default: 'Other'
+  }
 });
 const Task = mongoose.model("Task", TaskSchema);
 
