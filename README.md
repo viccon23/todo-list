@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+# ToDo App
+A personal task management application built with React, MongoDB, and Electron.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![Task Management](https://shields.io/badge/Task%20Management-Electron-blue)
+![React](https://img.shields.io/badge/React-v18-blue)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green)
 
-## Available Scripts
+## Overview
+This is a desktop task management application that allows you to create, organize, and track tasks based on different categories (Personal, Work, School, Research, Health, and Other). The application keeps your tasks synchronized across multiple devices by connecting to a MongoDB cluster.
 
-In the project directory, you can run:
+## Features
+- ✅ Create, edit, and delete tasks
+- 📊 Organize tasks by type (Personal, Work, School, Research, Health, Other)
+- 📱 Cross-device synchronization via MongoDB
+- 🖥️ Desktop application with Electron
+- 📋 Rich text descriptions
+- 🔄 Real-time database connection status
 
-### `npm start`
+## Screenshots
+![image](https://github.com/user-attachments/assets/b8293087-336b-4ba7-af99-721edd0f9cd3)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Technologies Used
+- **Frontend**: React.js for the user interface
+- **Backend**: Node.js/Express for the server
+- **Database**: MongoDB for data storage
+- **Desktop Integration**: Electron to package as a desktop application
+- **API Communication**: Axios for HTTP requests
+- **Build Tool**: Electron-builder for packaging
 
-### `npm test`
+## Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Clone the repository
+```bash
+  git clone https://github.com/yourusername/todo-list.git
+  cd todo-list
+```
+### Install dependencies
+```bash
+npm install
+```
+### Package the application
+```bash
+npm run electron-pack
+```
+Run the installer from the dist directory
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Setup
+- When you first launch the application, you'll be prompted to enter your MongoDB connection URI.
+- The application requires an internet connection to sync with the MongoDB cluster.
+- Once connected, you can immediately begin creating and managing tasks.
+- Your tasks will synchronize across all devices using the same MongoDB connection.
+### Development
+To run the application in development mode:
+```bash
+npm run electron-dev
+```
+## Future Improvements
+- Task priority levels
+- Due dates and reminders
+- Offline mode with local database sync
+- Task sharing capabilities
+- Dark/light theme options
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
